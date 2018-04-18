@@ -22,7 +22,6 @@ public class OLD extends Game {
 	@Override
 	public void create() {
 		game = this;
-
 		shapeRenderer = new ShapeRenderer();
 		color = Color.WHITE;
 		setScreen(new SplashScreen(), Color.WHITE, 0.015f);
@@ -62,6 +61,7 @@ public class OLD extends Game {
 
 	@Override
 	public void resize(int width, int height) {
+		super.resize(width, height);
 		shapeRenderer = new ShapeRenderer();
 	}
 }
