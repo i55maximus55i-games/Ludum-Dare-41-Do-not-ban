@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -39,6 +40,8 @@ public class GameScreen implements Screen {
     float mx, my;
     int selectedPlayer = 0;
 
+    Texture texture;
+
     @Override
     public void show() {
         camera = new OrthographicCamera();
@@ -61,12 +64,13 @@ public class GameScreen implements Screen {
 
         createStage();
         bullets = new ArrayList<Bullet>();
+        texture = new Texture("bullet.png");
     }
 
     @Override
     public void render(float delta) {
         for (Player i : players) {
-            i.update();
+            i.update(delta);
         }
         for (Enemy i : enemies) {
             i.update(delta);
@@ -90,6 +94,9 @@ public class GameScreen implements Screen {
         }
         for (Enemy i : enemies) {
             i.draw(batch);
+        }
+        for (Bullet i : bullets) {
+            batch.draw(texture, (i.getPos().x - 16 / 2 / OLD.SCALE) * OLD.SCALE, (i.getPos().y - 16 / 2 / OLD.SCALE) * OLD.SCALE);
         }
         batch.end();
         debugRenderer.render(world, camera.combined);
@@ -199,21 +206,6 @@ public class GameScreen implements Screen {
     }
 
     static void createBullet(Vector2 pos, Vector2 vel) {
-        BodyDef bDef = new BodyDef();
-        CircleShape shape = new CircleShape();
-        FixtureDef fDef = new FixtureDef();
-        Body body;
-
-        bDef.type = BodyDef.BodyType.KinematicBody;
-        bDef.position.set(pos);
-
-        body = world.createBody(bDef);
-
-        shape.setRadius(4 / OLD.SCALE);
-        fDef.shape = shape;
-        body.createFixture(fDef);
-        body.setUserData("bullet");
-
-        body.setLinearVelocity(vel);
+        bullets.add(new Bullet(world, pos, vel));
     }
 }

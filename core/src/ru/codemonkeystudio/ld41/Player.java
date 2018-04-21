@@ -15,6 +15,7 @@ public class Player {
     float x, y;
     boolean jumpD = false;
     int health = 100;
+    float timer = 0.5f;
 
     public Player(int num, World world, float x, float y) {
         this.num = num;
@@ -39,7 +40,7 @@ public class Player {
         region = new TextureRegion(texture);
     }
 
-    public void update() {
+    public void update(float delta) {
         if (Math.abs(getPos().x - x) > 10 / OLD.SCALE) {
             body.setLinearVelocity((getPos().x < x) ? 40 / OLD.SCALE : -40 / OLD.SCALE, getVel().y);
         }
@@ -50,6 +51,22 @@ public class Player {
             else {
                 jumpUp();
             }
+        }
+
+        int min = 0;
+        for (Enemy i : GameScreen.enemies) {
+            if (getPos().dst(i.getPos()) < getPos().dst(GameScreen.enemies.get(min).getPos())) {
+                min = i.num;
+            }
+        }
+        if (getPos().dst(GameScreen.enemies.get(min).getPos()) < 200 / OLD.SCALE) {
+            timer -= delta;
+            if (timer < 0) {
+                GameScreen.createBullet(getPos(), getPos().cpy().sub(GameScreen.enemies.get(min).getPos()).setLength(400).rotate(180));
+                timer = 0.5f;
+            }
+        } else {
+            timer = 0.5f;
         }
     }
 

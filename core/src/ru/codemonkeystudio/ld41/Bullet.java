@@ -1,23 +1,30 @@
 package ru.codemonkeystudio.ld41;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Bullet {
     Body body;
 
-    public Bullet(World world, float x, float y) {
+    public Bullet(World world, Vector2 pos, Vector2 vel) {
         BodyDef bDef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
+        CircleShape shape = new CircleShape();
         FixtureDef fDef = new FixtureDef();
 
-        bDef.type = BodyDef.BodyType.DynamicBody;
-        bDef.position.set((x + 24 / 2) / OLD.SCALE, (y + 64 / 2) / OLD.SCALE);
+        bDef.type = BodyDef.BodyType.KinematicBody;
+        bDef.position.set(pos);
 
         body = world.createBody(bDef);
 
-        shape.setAsBox((24 / 2) / OLD.SCALE, (64 / 2) / OLD.SCALE);
+        shape.setRadius(8 / OLD.SCALE);
         fDef.shape = shape;
         body.createFixture(fDef);
         body.setUserData("bullet");
+
+        body.setLinearVelocity(vel);
+    }
+
+    public Vector2 getPos() {
+        return body.getPosition();
     }
 }
