@@ -16,6 +16,8 @@ public class Enemy {
 
     int num;
 
+    float timer = 1f;
+
     public Enemy(World world, int num, float x, float y) {
         this.num = num;
         BodyDef bDef = new BodyDef();
@@ -36,7 +38,7 @@ public class Enemy {
         region = new TextureRegion(texture);
     }
 
-    public void update() {
+    public void update(float delta) {
         int min = 0;
         for (Player i : GameScreen.players) {
             if (getPos().dst(i.getPos()) < getPos().dst(GameScreen.players.get(min).getPos())) {
@@ -71,6 +73,12 @@ public class Enemy {
                 else {
                     body.setLinearVelocity(-20 / OLD.SCALE, getVel().y);
                 }
+            }
+
+            timer -= delta;
+            if (timer < 0) {
+                timer += 1f;
+                GameScreen.createBullet(getPos(), getPos().cpy().sub(GameScreen.players.get(min).getPos()).setLength(400).rotate(180));
             }
         }
     }

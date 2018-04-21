@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen {
     TiledMap map;
-    World world;
+    static World world;
 
     SpriteBatch batch;
     OrthogonalTiledMapRenderer mapRenderer;
@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
             i.update();
         }
         for (Enemy i : enemies) {
-            i.update();
+            i.update(delta);
         }
         world.step(delta, 10, 10);
 
@@ -196,5 +196,24 @@ public class GameScreen implements Screen {
         }
 
         stage.addActor(table);
+    }
+
+    static void createBullet(Vector2 pos, Vector2 vel) {
+        BodyDef bDef = new BodyDef();
+        CircleShape shape = new CircleShape();
+        FixtureDef fDef = new FixtureDef();
+        Body body;
+
+        bDef.type = BodyDef.BodyType.KinematicBody;
+        bDef.position.set(pos);
+
+        body = world.createBody(bDef);
+
+        shape.setRadius(4 / OLD.SCALE);
+        fDef.shape = shape;
+        body.createFixture(fDef);
+        body.setUserData("bullet");
+
+        body.setLinearVelocity(vel);
     }
 }

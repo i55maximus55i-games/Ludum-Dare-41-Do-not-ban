@@ -42,6 +42,10 @@ public class ContactHandler implements ContactListener {
         if (contact.getFixtureB().getBody().getLinearVelocity().y > 0) {
             contact.setEnabled(false);
         }
+
+        if (contact.getFixtureA().getBody().getUserData().toString().contains("bullet") || contact.getFixtureB().getBody().getUserData().toString().contains("bullet")) {
+            contact.setEnabled(false);
+        }
     }
 
     @Override
