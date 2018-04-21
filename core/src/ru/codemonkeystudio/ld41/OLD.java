@@ -19,9 +19,12 @@ public class OLD extends Game {
 	private Color color;
 	private Screen screen;
 
+	public static final float SCALE = 4f;
+
 	@Override
 	public void create() {
 		game = this;
+		Styles.init();
 		shapeRenderer = new ShapeRenderer();
 		color = Color.WHITE;
 		setScreen(new SplashScreen(), Color.WHITE, 0.015f);
