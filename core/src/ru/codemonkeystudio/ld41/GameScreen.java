@@ -32,7 +32,9 @@ public class GameScreen implements Screen {
 
     Stage stage;
 
-    public static ArrayList<Player> players;
+    static ArrayList<Player> players;
+    static ArrayList<Enemy> enemies;
+    static ArrayList<Bullet> bullets;
 
     float mx, my;
     int selectedPlayer = 0;
@@ -52,16 +54,21 @@ public class GameScreen implements Screen {
 
         createWalls();
         createPlayers();
+        createEnemies();
 
         mx = Gdx.input.getX();
         my = Gdx.input.getY();
 
         createStage();
+        bullets = new ArrayList<Bullet>();
     }
 
     @Override
     public void render(float delta) {
         for (Player i : players) {
+            i.update();
+        }
+        for (Enemy i : enemies) {
             i.update();
         }
         world.step(delta, 10, 10);
@@ -79,6 +86,9 @@ public class GameScreen implements Screen {
         mapRenderer.render();
         batch.begin();
         for (Player i : players) {
+            i.draw(batch);
+        }
+        for (Enemy i : enemies) {
             i.draw(batch);
         }
         batch.end();
@@ -105,8 +115,6 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-        stage.dispose();
-        createStage();
     }
 
     @Override
@@ -155,6 +163,15 @@ public class GameScreen implements Screen {
         for (RectangleMapObject i : map.getLayers().get("player").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = i.getRectangle();
             players.add(new Player(a++, world, rect.getX(), rect.getY()));
+        }
+    }
+
+    private void createEnemies() {
+        enemies = new ArrayList<Enemy>();
+        int a = 0;
+        for (RectangleMapObject i : map.getLayers().get("enemies").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = i.getRectangle();
+            enemies.add(new Enemy(world, a++, rect.getX(), rect.getY()));
         }
     }
 

@@ -19,12 +19,22 @@ public class ContactHandler implements ContactListener {
                 GameScreen.players.get(contact.getFixtureB().getBody().getUserData().toString().charAt(6) - '0').jumpD = false;
             }
         }
+        if (contact.getFixtureB().getBody().getUserData().toString().contains("enemy")) {
+            if (GameScreen.players.get(Integer.parseInt(contact.getFixtureB().getBody().getUserData().toString().substring(5))).jumpD) {
+                GameScreen.players.get(Integer.parseInt(contact.getFixtureB().getBody().getUserData().toString().substring(5))).jumpD = false;
+            }
+        }
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
         if (contact.getFixtureB().getBody().getUserData().toString().contains("player")) {
             if (GameScreen.players.get(contact.getFixtureB().getBody().getUserData().toString().charAt(6) - '0').jumpD) {
+                contact.setEnabled(false);
+            }
+        }
+        if (contact.getFixtureB().getBody().getUserData().toString().contains("enemy")) {
+            if (GameScreen.enemies.get(Integer.parseInt(contact.getFixtureB().getBody().getUserData().toString().substring(5))).jumpD) {
                 contact.setEnabled(false);
             }
         }
