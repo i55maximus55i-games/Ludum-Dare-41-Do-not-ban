@@ -98,6 +98,8 @@ public class GameScreen implements Screen {
             selectedPlayer = 3;
 
         stage.draw();
+        stage.dispose();
+        createStage();
     }
 
     @Override
@@ -165,9 +167,15 @@ public class GameScreen implements Screen {
         table.left();
 
         for (Player i : players) {
-            Label label = new Label("Player " + (i.num + 1) + "       " + i.health + "/100", Styles.labelStyle);
-            table.add(label);
-            table.row();
+            if (i.num == selectedPlayer) {
+                Label label = new Label(">Player " + (i.num + 1) + "       " + i.health + "/100", Styles.labelStyle);
+                table.add(label);
+                table.row();
+            } else {
+                Label label = new Label(" Player " + (i.num + 1) + "       " + i.health + "/100", Styles.labelStyle);
+                table.add(label);
+                table.row();
+            }
         }
 
         stage.addActor(table);
