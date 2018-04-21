@@ -193,10 +193,14 @@ public class GameScreen implements Screen {
         for (Player i : players) {
             if (i.num == selectedPlayer) {
                 Label label = new Label(">Player " + (i.num + 1) + "       " + i.health + "/100", Styles.labelStyle);
+                if (i.health <= 0)
+                    label = new Label(">Player " + (i.num + 1) + "       " + "DEAD", Styles.labelStyle);
                 table.add(label);
                 table.row();
             } else {
                 Label label = new Label(" Player " + (i.num + 1) + "       " + i.health + "/100", Styles.labelStyle);
+                if (i.health <= 0)
+                    label = new Label(" Player " + (i.num + 1) + "       " + "DEAD", Styles.labelStyle);
                 table.add(label);
                 table.row();
             }

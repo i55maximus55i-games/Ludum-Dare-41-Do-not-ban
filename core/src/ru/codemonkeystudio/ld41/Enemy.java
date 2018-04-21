@@ -50,7 +50,7 @@ public class Enemy {
             enabled = true;
         }
 
-        if (enabled) {
+        if (enabled && health > 0) {
             if (Math.abs(getPos().y - GameScreen.players.get(min).getPos().y) > 50 / OLD.SCALE) {
                 if (getPos().y < GameScreen.players.get(min).getPos().y) {
                     jumpUp();

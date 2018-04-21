@@ -14,7 +14,7 @@ public class ContactHandler implements ContactListener {
                 GameScreen.players.get(contact.getFixtureA().getBody().getUserData().toString().charAt(6) - '0').health -= 10;
             }
             if (contact.getFixtureA().getBody().getUserData().toString().contains("enemy")) {
-                GameScreen.enemies.get(Integer.parseInt(contact.getFixtureA().getBody().getUserData().toString().substring(5))).health -= 10;
+                GameScreen.enemies.get(Integer.parseInt(contact.getFixtureA().getBody().getUserData().toString().substring(5))).health -= 25;
             }
         }
     }
