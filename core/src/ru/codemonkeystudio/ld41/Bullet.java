@@ -21,7 +21,7 @@ public class Bullet {
         body.createFixture(fDef);
         body.setUserData("bullet");
 
-        body.setLinearVelocity(vel);
+        body.setLinearVelocity(vel.setLength(400));
     }
 
     public Vector2 getPos() {

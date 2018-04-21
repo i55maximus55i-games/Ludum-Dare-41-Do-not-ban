@@ -42,7 +42,7 @@ public class Player {
 
     public void update(float delta) {
         if (Math.abs(getPos().x - x) > 10 / OLD.SCALE) {
-            body.setLinearVelocity((getPos().x < x) ? 40 / OLD.SCALE : -40 / OLD.SCALE, getVel().y);
+            body.setLinearVelocity((getPos().x < x) ? 60 / OLD.SCALE : -60 / OLD.SCALE, getVel().y);
         }
         if (Math.abs(getPos().y - y) > 60 / OLD.SCALE) {
             if (getPos().y > y) {

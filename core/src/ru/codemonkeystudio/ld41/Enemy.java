@@ -13,6 +13,7 @@ public class Enemy {
 
     boolean enabled = false;
     boolean jumpD = false;
+    int health = 100;
 
     int num;
 

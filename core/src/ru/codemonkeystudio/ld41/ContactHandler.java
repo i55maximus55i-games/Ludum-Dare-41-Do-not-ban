@@ -9,7 +9,14 @@ public class ContactHandler implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-
+        if (contact.getFixtureA().getBody().getUserData().toString().contains("bullet") || contact.getFixtureB().getBody().getUserData().toString().contains("bullet")) {
+            if (contact.getFixtureA().getBody().getUserData().toString().contains("player")) {
+                GameScreen.players.get(contact.getFixtureA().getBody().getUserData().toString().charAt(6) - '0').health -= 10;
+            }
+            if (contact.getFixtureA().getBody().getUserData().toString().contains("enemy")) {
+                GameScreen.enemies.get(Integer.parseInt(contact.getFixtureA().getBody().getUserData().toString().substring(5))).health -= 10;
+            }
+        }
     }
 
     @Override
