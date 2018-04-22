@@ -3,6 +3,7 @@ package ru.codemonkeystudio.ld41;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,6 +35,8 @@ public class SplashScreen implements Screen {
 
     private boolean g;
 
+    Music m = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
+
     @Override
     public void show() {
         viewport = new ScreenViewport();
@@ -47,7 +50,8 @@ public class SplashScreen implements Screen {
 
         g = true;
 
-        OLD.game.menu.play();
+        m.setLooping(true);
+        m.play();
     }
 
     @Override
@@ -85,6 +89,7 @@ public class SplashScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             OLD.game.setScreen(new GameScreen(), Color.BLACK, 0.1f);
             g = false;
+            m.stop();
         }
     }
 
@@ -106,7 +111,6 @@ public class SplashScreen implements Screen {
 
     @Override
     public void hide() {
-        OLD.game.menu.stop();
     }
 
     @Override

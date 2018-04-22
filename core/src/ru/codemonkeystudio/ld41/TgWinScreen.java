@@ -3,6 +3,7 @@ package ru.codemonkeystudio.ld41;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,8 @@ public class TgWinScreen implements Screen {
     private Viewport viewport;
 
     private int i;
+
+    Music m = Gdx.audio.newMusic(Gdx.files.internal("music/tgwin.mp3"));
 
     private Color[] colors = {
             new Color(1f, 1f, 1f, 0f)
@@ -43,7 +46,8 @@ public class TgWinScreen implements Screen {
 
         g = true;
 
-        OLD.game.tgwin.play();
+        m.setLooping(true);
+        m.play();
     }
 
     @Override
@@ -81,6 +85,7 @@ public class TgWinScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             OLD.game.setScreen(new SplashScreen(), Color.BLACK, 0.1f);
             g = false;
+            m.stop();
         }
     }
 
@@ -102,7 +107,6 @@ public class TgWinScreen implements Screen {
 
     @Override
     public void hide() {
-        OLD.game.tgwin.stop();
     }
 
     @Override

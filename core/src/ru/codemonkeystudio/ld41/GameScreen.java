@@ -3,6 +3,7 @@ package ru.codemonkeystudio.ld41;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -54,6 +55,10 @@ public class GameScreen implements Screen {
 
     static int s = -1;
 
+    Music m1 = Gdx.audio.newMusic(Gdx.files.internal("music/theme.mp3"));
+    Music m2 = Gdx.audio.newMusic(Gdx.files.internal("music/boss-fight.mp3"));
+    boolean a = true;
+
     @Override
     public void show() {
         camera = new OrthographicCamera();
@@ -80,7 +85,9 @@ public class GameScreen implements Screen {
 
         boss = new Boss();
 
-        OLD.game.theme.play();
+        m1.setLooping(true);
+        m2.setLooping(true);
+        m1.play();
     }
 
     @Override
@@ -91,10 +98,16 @@ public class GameScreen implements Screen {
             if (i.health <= 0)
                 d++;
         }
-        if (d >= 4)
+        if (d >= 4) {
+            m1.stop();
+            m2.stop();
             OLD.game.setScreen(new TgWinScreen());
-        if (boss.health <= 0)
+        }
+        if (boss.health <= 0) {
+            m1.stop();
+            m2.stop();
             OLD.game.setScreen(new RWinScreen());
+        }
         for (Enemy i : enemies) {
             i.update(delta);
         }
@@ -147,9 +160,10 @@ public class GameScreen implements Screen {
         stage.dispose();
         createStage();
 
-        if (boss.health < 20) {
-            OLD.game.theme.stop();
-            OLD.game.boss.play();
+        if (boss.health < 20 && a) {
+            m1.stop();
+            m2.play();
+            a = false;
         }
     }
 
@@ -170,13 +184,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-        OLD.game.theme.stop();
-        OLD.game.boss.stop();
+        dispose();
     }
 
     @Override
     public void dispose() {
-
+        m1.dispose();
+        m2.dispose();
     }
 
     private void createWalls() {
