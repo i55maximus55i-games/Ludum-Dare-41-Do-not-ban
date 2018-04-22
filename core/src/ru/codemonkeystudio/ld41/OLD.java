@@ -3,6 +3,8 @@ package ru.codemonkeystudio.ld41;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -19,6 +21,12 @@ public class OLD extends Game {
 	private Color color;
 	private Screen screen;
 
+	Music theme;
+	Music ussr;
+	Music tgwin;
+	Music boss;
+	Music menu;
+
 	public static final float SCALE = 4f;
 
 	@Override
@@ -29,6 +37,18 @@ public class OLD extends Game {
 		color = Color.WHITE;
 		setScreen(new SplashScreen(), Color.WHITE, 0.015f);
 		blend = -0.3f;
+
+		theme = Gdx.audio.newMusic(Gdx.files.internal("music/theme.mp3"));
+		ussr = Gdx.audio.newMusic(Gdx.files.internal("music/ussr.mp3"));
+		tgwin = Gdx.audio.newMusic(Gdx.files.internal("music/tgwin.mp3"));
+		boss = Gdx.audio.newMusic(Gdx.files.internal("music/boss-fight.mp3"));
+		menu = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
+
+		theme.setLooping(true);
+		ussr.setLooping(true);
+		tgwin.setLooping(true);
+		boss.setLooping(true);
+		menu.setLooping(true);
 	}
 
 	public void setScreen(Screen screen, Color color, float delta) {

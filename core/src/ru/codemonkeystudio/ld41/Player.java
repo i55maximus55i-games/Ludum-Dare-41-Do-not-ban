@@ -25,25 +25,25 @@ public class Player {
         FixtureDef fDef = new FixtureDef();
 
         bDef.type = BodyDef.BodyType.DynamicBody;
-        bDef.position.set((x + 24 / 2) / OLD.SCALE, (y + 64 / 2) / OLD.SCALE);
-        this.x = (x + 24 / 2) / OLD.SCALE;
-        this.y = (y + 64 / 2) / OLD.SCALE;
+        bDef.position.set((x + 30 / 2) / OLD.SCALE, (y + 44 / 2) / OLD.SCALE);
+        this.x = (x + 30 / 2) / OLD.SCALE;
+        this.y = (y + 44 / 2) / OLD.SCALE;
 
         body = world.createBody(bDef);
 
-        shape.setAsBox((24 / 2) / OLD.SCALE, (64 / 2) / OLD.SCALE);
+        shape.setAsBox((30 / 2) / OLD.SCALE, (44 / 2) / OLD.SCALE);
         fDef.shape = shape;
         body.createFixture(fDef);
         body.setUserData("player" + num);
 
-        texture = new Texture("player/player" + num + ".png");
+        texture = new Texture("player/player" + num + num + ".png");
         region = new TextureRegion(texture);
     }
 
     public void update(float delta) {
         if (health > 0) {
             if (Math.abs(getPos().x - x) > 10 / OLD.SCALE) {
-                body.setLinearVelocity((getPos().x < x) ? 60 / OLD.SCALE : -60 / OLD.SCALE, getVel().y);
+                body.setLinearVelocity((getPos().x < x) ? 120 / OLD.SCALE : -120 / OLD.SCALE, getVel().y);
             }
             if (Math.abs(getPos().y - y) > 60 / OLD.SCALE) {
                 if (getPos().y > y) {
@@ -55,30 +55,39 @@ public class Player {
 
             int min = 0;
             for (Enemy i : GameScreen.enemies) {
-                if (getPos().dst(i.getPos()) < getPos().dst(GameScreen.enemies.get(min).getPos()) && GameScreen.enemies.get(min).health > 0) {
+                if (getPos().dst(i.getPos()) < getPos().dst(GameScreen.enemies.get(min).getPos()) && i.health > 0) {
                     min = i.num;
                 }
             }
-            if (getPos().dst(GameScreen.enemies.get(min).getPos()) < 200 / OLD.SCALE && GameScreen.enemies.get(min).health > 0) {
+            if (getPos().dst(GameScreen.boss.pos.cpy().scl(1 / OLD.SCALE)) < 300 / OLD.SCALE) {
                 timer -= delta;
                 if (timer < 0) {
-                    GameScreen.createBullet(getPos(), getPos().cpy().sub(GameScreen.enemies.get(min).getPos()).setLength(400).rotate(180));
+                    GameScreen.createBullet(getPos(), getPos().cpy().sub(GameScreen.boss.pos.cpy().scl(1 / OLD.SCALE)).setLength(400).rotate(180), true);
+                    timer = 0.5f;
+                }
+            }
+            else if (getPos().dst(GameScreen.enemies.get(min).getPos()) < 200 / OLD.SCALE && GameScreen.enemies.get(min).health > 0) {
+                timer -= delta;
+                if (timer < 0) {
+                    GameScreen.createBullet(getPos(), getPos().cpy().sub(GameScreen.enemies.get(min).getPos()).setLength(400).rotate(180), true);
                     timer = 0.5f;
                 }
             } else {
                 timer = 0.5f;
             }
         }
+        if (getPos().y < 0)
+            health = 0;
     }
 
     public void draw(SpriteBatch batch) {
         if (getVel().x < 0)
-            region.setRegion(0, 0, 24, 64);
+            region.setRegion(0, 0, 30, 44);
         if (getVel().x == 0)
-            region.setRegion(24, 0, 24, 64);
+            region.setRegion(30, 0, 30, 44);
         if (getVel().x > 0)
-            region.setRegion(48, 0, 24, 64);
-        batch.draw(region, (getPos().x - 24 / 2 / OLD.SCALE) * OLD.SCALE, (getPos().y - 64 / 2 / OLD.SCALE) * OLD.SCALE);
+            region.setRegion(60, 0, 30, 44);
+        batch.draw(region, (getPos().x - 30 / 2 / OLD.SCALE) * OLD.SCALE, (getPos().y - 44 / 2 / OLD.SCALE) * OLD.SCALE);
     }
 
     public Vector2 getPos() {

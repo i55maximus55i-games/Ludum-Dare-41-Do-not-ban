@@ -20,7 +20,7 @@ public class SplashScreen implements Screen {
     private Color[] colors = {
             new Color(1f, 1f, 1f, 0f),
             new Color(0.9450980392156863f, 0.9450980392156863f, 0.9450980392156863f, 0f),
-            new Color(0.7098039215686275f, 0.9019607843137255f, 0.1137254901960784f, 0f)
+            new Color(1, 1, 1, 0f)
     };
     private String[] textures = {
             "libgdx.jpg",
@@ -46,6 +46,8 @@ public class SplashScreen implements Screen {
         texture = new Texture("splashes/" + textures[i]);
 
         g = true;
+
+        OLD.game.menu.play();
     }
 
     @Override
@@ -104,7 +106,7 @@ public class SplashScreen implements Screen {
 
     @Override
     public void hide() {
-
+        OLD.game.menu.stop();
     }
 
     @Override

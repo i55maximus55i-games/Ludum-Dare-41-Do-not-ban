@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.*;
 public class Bullet {
     Body body;
 
-    public Bullet(World world, Vector2 pos, Vector2 vel) {
+    public Bullet(World world, Vector2 pos, Vector2 vel, boolean rkn) {
         BodyDef bDef = new BodyDef();
         CircleShape shape = new CircleShape();
         FixtureDef fDef = new FixtureDef();
@@ -19,7 +19,7 @@ public class Bullet {
         shape.setRadius(8 / OLD.SCALE);
         fDef.shape = shape;
         body.createFixture(fDef);
-        body.setUserData("bullet");
+        body.setUserData("bullet" + (rkn ? "r" : "d"));
 
         body.setLinearVelocity(vel.setLength(400));
     }

@@ -3,6 +3,7 @@ package ru.codemonkeystudio.ld41;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,7 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
-    TiledMap map;
+    static TiledMap map;
     static World world;
 
     SpriteBatch batch;
@@ -36,11 +37,22 @@ public class GameScreen implements Screen {
     static ArrayList<Player> players;
     static ArrayList<Enemy> enemies;
     static ArrayList<Bullet> bullets;
+    static Boss boss;
 
     float mx, my;
     int selectedPlayer = 0;
 
     Texture texture;
+    Texture[] textures = {
+            new Texture("screamers/amazon.png"),
+            new Texture("screamers/digit.png"),
+            new Texture("screamers/git.png"),
+            new Texture("screamers/google.jpg"),
+            new Texture("screamers/twitch.png"),
+            new Texture("screamers/huy.jpg")
+    };
+
+    static int s = -1;
 
     @Override
     public void show() {
@@ -65,16 +77,28 @@ public class GameScreen implements Screen {
         createStage();
         bullets = new ArrayList<Bullet>();
         texture = new Texture("bullet.png");
+
+        boss = new Boss();
+
+        OLD.game.theme.play();
     }
 
     @Override
     public void render(float delta) {
+        int d = 0;
         for (Player i : players) {
             i.update(delta);
+            if (i.health <= 0)
+                d++;
         }
+        if (d >= 4)
+            OLD.game.setScreen(new TgWinScreen());
+        if (boss.health <= 0)
+            OLD.game.setScreen(new RWinScreen());
         for (Enemy i : enemies) {
             i.update(delta);
         }
+        boss.update(delta);
         world.step(delta, 10, 10);
 
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
@@ -98,8 +122,13 @@ public class GameScreen implements Screen {
         for (Bullet i : bullets) {
             batch.draw(texture, (i.getPos().x - 16 / 2 / OLD.SCALE) * OLD.SCALE, (i.getPos().y - 16 / 2 / OLD.SCALE) * OLD.SCALE);
         }
+        if (s >= 0) {
+            batch.draw(textures[s], camera.position.x - textures[s].getWidth() / 2, camera.position.y - textures[s].getHeight() / 2);
+            s = -1;
+        }
+        boss.draw(batch);
         batch.end();
-        debugRenderer.render(world, camera.combined);
+//        debugRenderer.render(world, camera.combined);
 
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             players.get(selectedPlayer).x = (Gdx.input.getX() + camera.position.x - Gdx.graphics.getWidth() / 2) / OLD.SCALE;
@@ -117,6 +146,11 @@ public class GameScreen implements Screen {
         stage.draw();
         stage.dispose();
         createStage();
+
+        if (boss.health < 20) {
+            OLD.game.theme.stop();
+            OLD.game.boss.play();
+        }
     }
 
     @Override
@@ -136,7 +170,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-
+        OLD.game.theme.stop();
+        OLD.game.boss.stop();
     }
 
     @Override
@@ -189,7 +224,6 @@ public class GameScreen implements Screen {
         table.setFillParent(true);
         table.top();
         table.left();
-
         for (Player i : players) {
             if (i.num == selectedPlayer) {
                 Label label = new Label(">Player " + (i.num + 1) + "       " + i.health + "/100", Styles.labelStyle);
@@ -205,11 +239,24 @@ public class GameScreen implements Screen {
                 table.row();
             }
         }
+        stage.addActor(table);
 
+        table = new Table();
+        table.setFillParent(true);
+        table.top();
+        table.right();
+        int n = 0;
+        for (Enemy i : enemies) {
+            if (i.health <= 0) {
+                n++;
+            }
+        }
+        Label label = new Label("Диванных войск уничтожено: " + n, Styles.labelStyle);
+        table.add(label);
         stage.addActor(table);
     }
 
-    static void createBullet(Vector2 pos, Vector2 vel) {
-        bullets.add(new Bullet(world, pos, vel));
+    static void createBullet(Vector2 pos, Vector2 vel, boolean rkn) {
+        bullets.add(new Bullet(world, pos, vel, rkn));
     }
 }

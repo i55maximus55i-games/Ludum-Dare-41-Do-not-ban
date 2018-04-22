@@ -26,16 +26,16 @@ public class Enemy {
         FixtureDef fDef = new FixtureDef();
 
         bDef.type = BodyDef.BodyType.DynamicBody;
-        bDef.position.set((x + 24 / 2) / OLD.SCALE, (y + 64 / 2) / OLD.SCALE);
+        bDef.position.set((x + 30 / 2) / OLD.SCALE, (y + 44 / 2) / OLD.SCALE);
 
         body = world.createBody(bDef);
 
-        shape.setAsBox((24 / 2) / OLD.SCALE, (64 / 2) / OLD.SCALE);
+        shape.setAsBox((30 / 2) / OLD.SCALE, (44 / 2) / OLD.SCALE);
         fDef.shape = shape;
         body.createFixture(fDef);
         body.setUserData("enemy" + num);
 
-        texture = new Texture("enemy.png");
+        texture = new Texture("enemy1.png");
         region = new TextureRegion(texture);
     }
 
@@ -79,9 +79,11 @@ public class Enemy {
             timer -= delta;
             if (timer < 0) {
                 timer += 1f;
-                GameScreen.createBullet(getPos(), getPos().cpy().sub(GameScreen.players.get(min).getPos()).setLength(400).rotate(180));
+                GameScreen.createBullet(getPos(), getPos().cpy().sub(GameScreen.players.get(min).getPos()).setLength(400).rotate(180), false);
             }
         }
+        if (getPos().y < 0)
+            health = 0;
     }
 
     public void jumpUp() {
@@ -98,12 +100,12 @@ public class Enemy {
 
     public void draw(SpriteBatch batch) {
         if (!enabled)
-            region.setRegion(24, 0, 24, 64);
+            region.setRegion(30, 0, 30, 44);
         else if (getVel().x < 0)
-            region.setRegion(0, 0, 24, 64);
+            region.setRegion(0, 0, 30, 44);
         else
-            region.setRegion(48, 0, 24, 64);
-        batch.draw(region, (getPos().x - 24 / 2 / OLD.SCALE) * OLD.SCALE, (getPos().y - 64 / 2 / OLD.SCALE) * OLD.SCALE);
+            region.setRegion(60, 0, 30, 44);
+        batch.draw(region, (getPos().x - 30 / 2 / OLD.SCALE) * OLD.SCALE, (getPos().y - 44 / 2 / OLD.SCALE) * OLD.SCALE);
     }
 
     public Vector2 getPos() {
